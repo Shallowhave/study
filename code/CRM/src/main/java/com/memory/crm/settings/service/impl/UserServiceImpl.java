@@ -13,36 +13,34 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserServiceImpl implements UserService {
-    private UserDao userdao= SqlSessionUtil.getSqlSession().getMapper(UserDao.class);
-    public User login(String loingAct, String loginPwd, String ip) throws LoginException {
-        Map<String, String> count = new HashMap<String, String>();
-        count.put("loingAct", loingAct);
-        loginPwd= MD5Util.getMD5(loginPwd);
-        System.out.println(loginPwd);
-        count.put("loginPwd", loginPwd);
-        User user = userdao.login(count);
-        if (user==null){
+    private UserDao userdao = SqlSessionUtil.getSqlSession().getMapper(UserDao.class);
+
+    public User login(String loginAct, String loginPwd, String ip) throws LoginException {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("loginAct", loginAct);
+        map.put("loginPwd", loginPwd);
+        User user = userdao.login(map);
+        if (user == null) {
             throw new LoginException("账号或者密码错误");
 
         }
         String expireTime = user.getExpireTime();
         String sysTime = DateTimeUtil.getSysTime();
-        if (expireTime.compareTo(sysTime)<0){
+        if (expireTime.compareTo(sysTime) < 0) {
             throw new LoginException("账号已失效");
         }
         String lockState = user.getLockState();
-        if ("0".equals(lockState)){
-            throw  new LoginException("账号已锁定");
+        if ("0".equals(lockState)) {
+            throw new LoginException("账号已锁定");
         }
         String allowIps = user.getAllowIps();
-        if (!allowIps.contains(ip)){
+        if (!allowIps.contains(ip)) {
             throw new LoginException("ip地址受限");
         }
 
 
         return user;
     }
-
 
 
 }

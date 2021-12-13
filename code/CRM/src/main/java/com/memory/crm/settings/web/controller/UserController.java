@@ -1,7 +1,9 @@
 package com.memory.crm.settings.web.controller;
 
+import com.memory.crm.settings.doman.User;
 import com.memory.crm.settings.service.UserService;
 import com.memory.crm.settings.service.impl.UserServiceImpl;
+import com.memory.crm.utils.MD5Util;
 import com.memory.crm.utils.PrintJson;
 import com.memory.crm.utils.ServiceFactory;
 import com.sun.net.httpserver.HttpServer;
@@ -23,42 +25,48 @@ import java.util.Map;
 
 public class UserController extends HttpServlet {
     @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path = req.getServletPath();
-        if ("/settings/user/login.do".equals(path)){
-            loing(req,resp);
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String path = request.getServletPath();
+        System.out.println(path);
+        if ("/settings/user/login.do".equals(path)) {
+            loing(request, response);
 
-        }else if ("/settings/user/xxx.do".equals(path)){
+        } else if ("/settings/user/xxx.do".equals(path)) {
 
         }
     }
 
-    private void loing(HttpServletRequest req, HttpServletResponse resp) {
+    private void loing(HttpServletRequest request, HttpServletResponse response) {
         System.out.println("执行controller登录");
-        String loginAct = req.getParameter("loginAct");
-        String loginPwd = req.getParameter("loginPwd");
-        String ip = req.getRemoteAddr();
-        UserService user = (UserService) ServiceFactory.getService(new UserServiceImpl());
+        String loginAct = request.getParameter("loginAct");
+        String loginPwd = request.getParameter("loginPwd");
+        loginPwd = MD5Util.getMD5(loginPwd);
+        String ip = request.getRemoteAddr();
+        // System.out.println(ip);
+        // String ip2= request.getLocalAddr();
+        // System.out.println(ip2);
+        UserService userService = (UserService) ServiceFactory.getService(new UserServiceImpl());
 
         try {
-            user.login(loginAct, loginPwd, ip);
-            req.getSession().setAttribute("user",user);
+            User user = userService.login(loginAct, loginPwd, ip);
+            request.getSession().setAttribute("user", userService);
             //{"success":true}
-            // String str ="{\"sucess\":true}";
-            // resp.getWriter().print(str);
-            PrintJson.printJsonFlag(resp,true);
-        }catch (Exception e){
+            // String str ="{\"success\":true}";
+            // response.getWriter().print(str);
+            PrintJson.printJsonFlag(response, true);
+
+        } catch (Exception e) {
             e.printStackTrace();
             String msg = e.getMessage();
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("success",false);
-            map.put("msg",msg);
-            PrintJson.printJsonObj(resp,map);
+            map.put("success", false);
+            map.put("msg", msg);
+            response.setContentType("text/html; charset=UTF-8");
+            // response.setCharacterEncoding("utf-8");
+            PrintJson.printJsonObj(response, map);
 
 
         }
-
-
 
 
     }
