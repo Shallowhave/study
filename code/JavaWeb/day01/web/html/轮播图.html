@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>轮播图</title>
+
+</head>
+<body>
+    <img id="img" src="img/1.png" width="1920" height="1080">
+
+    <script>
+        var number=1;
+        function f() {
+            number++;
+            if (number>6){
+                number=1;
+            }
+
+            document.getElementById("img").src = "img/"+number+".png";
+
+        }
+        setInterval(f,3000);
+
+    </script>
+
+</body>
+</html>
