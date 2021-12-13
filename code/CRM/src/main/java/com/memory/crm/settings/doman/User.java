@@ -1,121 +1,121 @@
 package com.memory.crm.settings.doman;
 
 public class User {
-    private String prid;
-    private String prloginAct;
-    private String prname;
-    private String prloginPwd;
-    private String premail;
-    private String prexpireTime;
-    private String prlockState;
-    private String prdeptno;
-    private String prallowIps;
-    private String prcreateTime;
-    private String prcreateBy;
-    private String preditTime;
-    private String preditBy;
+    private String id;
+    private String loginAct;
+    private String name;
+    private String loginPwd;
+    private String email;
+    private String expireTime;
+    private String lockState;
+    private String deptno;
+    private String allowIps;
+    private String createTime;
+    private String createBy;
+    private String editTime;
+    private String editBy;
 
-    public String getPrid() {
-        return prid;
+    public String getId() {
+        return id;
     }
 
-    public void setPrid(String prid) {
-        this.prid = prid;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getPrloginAct() {
-        return prloginAct;
+    public String getLoginAct() {
+        return loginAct;
     }
 
-    public void setPrloginAct(String prloginAct) {
-        this.prloginAct = prloginAct;
+    public void setLoginAct(String loginAct) {
+        this.loginAct = loginAct;
     }
 
-    public String getPrname() {
-        return prname;
+    public String getName() {
+        return name;
     }
 
-    public void setPrname(String prname) {
-        this.prname = prname;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPrloginPwd() {
-        return prloginPwd;
+    public String getLoginPwd() {
+        return loginPwd;
     }
 
-    public void setPrloginPwd(String prloginPwd) {
-        this.prloginPwd = prloginPwd;
+    public void setLoginPwd(String loginPwd) {
+        this.loginPwd = loginPwd;
     }
 
-    public String getPremail() {
-        return premail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPremail(String premail) {
-        this.premail = premail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getPrexpireTime() {
-        return prexpireTime;
+    public String getExpireTime() {
+        return expireTime;
     }
 
-    public void setPrexpireTime(String prexpireTime) {
-        this.prexpireTime = prexpireTime;
+    public void setExpireTime(String expireTime) {
+        this.expireTime = expireTime;
     }
 
-    public String getPrlockState() {
-        return prlockState;
+    public String getLockState() {
+        return lockState;
     }
 
-    public void setPrlockState(String prlockState) {
-        this.prlockState = prlockState;
+    public void setLockState(String lockState) {
+        this.lockState = lockState;
     }
 
-    public String getPrdeptno() {
-        return prdeptno;
+    public String getDeptno() {
+        return deptno;
     }
 
-    public void setPrdeptno(String prdeptno) {
-        this.prdeptno = prdeptno;
+    public void setDeptno(String deptno) {
+        this.deptno = deptno;
     }
 
-    public String getPrallowIps() {
-        return prallowIps;
+    public String getAllowIps() {
+        return allowIps;
     }
 
-    public void setPrallowIps(String prallowIps) {
-        this.prallowIps = prallowIps;
+    public void setAllowIps(String allowIps) {
+        this.allowIps = allowIps;
     }
 
-    public String getPrcreateTime() {
-        return prcreateTime;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setPrcreateTime(String prcreateTime) {
-        this.prcreateTime = prcreateTime;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
-    public String getPrcreateBy() {
-        return prcreateBy;
+    public String getCreateBy() {
+        return createBy;
     }
 
-    public void setPrcreateBy(String prcreateBy) {
-        this.prcreateBy = prcreateBy;
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
     }
 
-    public String getPreditTime() {
-        return preditTime;
+    public String getEditTime() {
+        return editTime;
     }
 
-    public void setPreditTime(String preditTime) {
-        this.preditTime = preditTime;
+    public void setEditTime(String editTime) {
+        this.editTime = editTime;
     }
 
-    public String getPreditBy() {
-        return preditBy;
+    public String getEditBy() {
+        return editBy;
     }
 
-    public void setPreditBy(String preditBy) {
-        this.preditBy = preditBy;
+    public void setEditBy(String editBy) {
+        this.editBy = editBy;
     }
 }
