@@ -9,7 +9,7 @@
   <typeAliases>
   
   	<package name="com.memory.crm.settings.doman"/>
-  	
+  	<package name="com.memory.crm.workbench.doman"/>
   
   </typeAliases>
   
@@ -29,6 +29,7 @@
   <mappers>
    
       <package name="com.memory.crm.settings.dao"/>
+      <package name="com.memory.crm.workbench.dao"/>
     
   </mappers>
 </configuration>

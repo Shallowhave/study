@@ -10,12 +10,14 @@ import com.memory.crm.utils.SqlSessionUtil;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UserServiceImpl implements UserService {
     private UserDao userdao = SqlSessionUtil.getSqlSession().getMapper(UserDao.class);
 
     public User login(String loginAct, String loginPwd, String ip) throws LoginException {
+        System.out.println("userservice 执行了");
         Map<String, String> map = new HashMap<String, String>();
         map.put("loginAct", loginAct);
         map.put("loginPwd", loginPwd);
@@ -40,6 +42,11 @@ public class UserServiceImpl implements UserService {
 
 
         return user;
+    }
+
+    public List<User> getUserList() {
+         List<User> list = userdao.getUserList();
+         return list;
     }
 
 
