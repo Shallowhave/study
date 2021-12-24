@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%String basePath = request.getScheme() + "://" +request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";%>
+<%String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";%>
 <!DOCTYPE html>
 <html>
 
@@ -36,7 +36,7 @@
 		});
 		
 		
-		window.open("workbench/main/index.jsp","workareaFrame");
+		window.open("workbench/main/index.html","workareaFrame");
 		
 	});
 	
