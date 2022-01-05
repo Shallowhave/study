@@ -16,6 +16,74 @@
 	var cancelAndSaveBtnDefault = true;
 	
 	$(function(){
+        //修改备注
+        $("#updateRemarkBtn").click(function (){
+            $.ajax({
+                url : "workbench/activity/updateRemark.do",
+                data : {
+                    "noteContent" : $("#noteContent").val(),
+                    "id" : $("#remarkId").val()
+                },
+                type : "post",
+                dataType: "json",
+                success : function (data){
+
+                    if (data.success){
+                        alert("修改成功")
+                        $(".remarkDiv").remove();
+                        showActivityRemark();
+                        $("#editRemarkModal").modal("hide");
+                    }else {
+                        alert("修改失败");
+                    }
+                    $("#noteContent").val("");
+
+                }
+            })
+        })
+        //添加备注
+        $("#saveRemarkBtn").click(function (){
+            // let val = $("#remark").val();
+            // alert(val);
+            $.ajax({
+                url : "workbench/activity/saveRemark.do",
+                data : {
+                    "activityId":"${a.id}",
+                    "careteBy" : "${a.owner}",
+                    "noteContent" : $("#remark").val()
+                },
+                type : "post",
+                dataType: "json",
+                success : function (data){
+                    //返回一个success：true/false
+                    if (data.success){
+
+                        $(".remarkDiv").remove();
+                        showActivityRemark();
+
+                    }else{
+                        alert("添加失败");
+                    }
+
+                }
+            })
+
+        })
+        $("#editActivityBtn").click(function (){
+            $("#editActivityModal").modal("show");
+
+            $.ajax({
+                url : "",
+                data : {
+                    "activityId" : "${a.id}"
+                },
+                type : "get",
+                dataType: "json",
+                success : function (data){
+
+                }
+            })
+        })
 		$("#remark").focus(function(){
 			if(cancelAndSaveBtnDefault){
 				//设置remarkDiv的高度为130px
@@ -49,7 +117,71 @@
 		$(".myHref").mouseout(function(){
 			$(this).children("span").css("color","#E6E6E6");
 		});
-	});
+		showActivityRemark();
+
+        $("#remarkBody").on("mouseover",".remarkDiv",function(){
+            $(this).children("div").children("div").show();
+        })
+        $("#remarkBody").on("mouseout",".remarkDiv",function(){
+            $(this).children("div").children("div").hide();
+        })
+
+    });
+	function showActivityRemark() {
+
+		$.ajax({
+			url : "workbench/activity/showActivityRemarkByAid.do",
+			data : {
+				"activityId":"${a.id}"
+			},
+			type : "get",
+			dataType: "json",
+			success : function (data){
+                var html = "";
+				$.each(data,function (i,n){
+					html += '<div id="'+n.id+'" class="remarkDiv" style="height: 60px;">';
+					html += '<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
+					html += '<div style="position: relative; top: -40px; left: 40px;" >';
+					html += '<h5>'+n.noteContent+'</h5>';
+					html += '<font color="gray">市场活动</font> <font color="gray">-</font> <b>${a.name}</b> <small style="color: gray;"> '+(n.editFlag==0?n.createTime:n.editTime)+' 由'+(n.editFlag==0?n.createBy:n.editBy)+'</small>';
+					html += '<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
+					html += '<a class="myHref" href="javascript:void(0);" onclick="editRemark(\''+n.id+'\')"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
+					html += '&nbsp;&nbsp;&nbsp;&nbsp;';
+					html += '<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\''+n.id+'\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
+					html += '</div>';
+					html += '</div>';
+                    html += '</div>';
+				})
+
+				$("#remarkDiv").before(html);
+
+			}
+		})
+
+	}
+    //打开修改备注的模态窗口
+    function editRemark(id){
+        $("#editRemarkModal").modal("show");
+        $("#remarkId").val(id);
+    }
+
+
+    function deleteRemark(id){
+
+        $.ajax({
+            url : "workbench/activity/deleteRemarkById.do",
+            data : {
+                "id" : id
+            },
+            type : "get",
+            dataType: "json",
+            success : function (data){
+
+            }
+        })
+        $("#"+id).remove();
+
+    }
 	
 </script>
 
@@ -162,7 +294,7 @@
 			<h3>市场活动-${a.name}<small>2020-10-10 ~ 2020-10-20</small></h3>
 		</div>
 		<div style="position: relative; height: 50px; width: 250px;  top: -72px; left: 700px;">
-			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
+			<button type="button" class="btn btn-default" id="editActivityBtn"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
 			<button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 		</div>
 	</div>
@@ -213,45 +345,45 @@
 	</div>
 	
 	<!-- 备注 -->
-	<div style="position: relative; top: 30px; left: 40px;">
+	<div style="position: relative; top: 30px; left: 40px;" id="remarkBody">
 		<div class="page-header">
 			<h4>备注</h4>
 		</div>
 		
-		<!-- 备注1 -->
-		<div class="remarkDiv" style="height: 60px;">
-			<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">
-			<div style="position: relative; top: -40px; left: 40px;" >
-				<h5>哎呦！</h5>
-				<font color="gray">市场活动</font> <font color="gray">-</font> <b>发传单</b> <small style="color: gray;"> 2017-01-22 10:10:10 由zhangsan</small>
-				<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">
-					<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>
-					&nbsp;&nbsp;&nbsp;&nbsp;
-					<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>
-				</div>
-			</div>
-		</div>
+<%--		<!-- 备注1 -->--%>
+<%--		<div class="remarkDiv" style="height: 60px;">--%>
+<%--			<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">--%>
+<%--			<div style="position: relative; top: -40px; left: 40px;" >--%>
+<%--				<h5>哎呦！</h5>--%>
+<%--				<font color="gray">市场活动</font> <font color="gray">-</font> <b>发传单</b> <small style="color: gray;"> 2017-01-22 10:10:10 由zhangsan</small>--%>
+<%--				<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">--%>
+<%--					<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>--%>
+<%--					&nbsp;&nbsp;&nbsp;&nbsp;--%>
+<%--					<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>--%>
+<%--				</div>--%>
+<%--			</div>--%>
+<%--		</div>--%>
 		
 		<!-- 备注2 -->
-		<div class="remarkDiv" style="height: 60px;">
-			<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">
-			<div style="position: relative; top: -40px; left: 40px;" >
-				<h5>呵呵！</h5>
-				<font color="gray">市场活动</font> <font color="gray">-</font> <b>发传单</b> <small style="color: gray;"> 2017-01-22 10:20:10 由zhangsan</small>
-				<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">
-					<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>
-					&nbsp;&nbsp;&nbsp;&nbsp;
-					<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>
-				</div>
-			</div>
-		</div>
+<%--		<div class="remarkDiv" style="height: 60px;">--%>
+<%--			<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">--%>
+<%--			<div style="position: relative; top: -40px; left: 40px;" >--%>
+<%--				<h5>呵呵！</h5>--%>
+<%--				<font color="gray">市场活动</font> <font color="gray">-</font> <b>发传单</b> <small style="color: gray;"> 2017-01-22 10:20:10 由zhangsan</small>--%>
+<%--				<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">--%>
+<%--					<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>--%>
+<%--					&nbsp;&nbsp;&nbsp;&nbsp;--%>
+<%--					<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>--%>
+<%--				</div>--%>
+<%--			</div>--%>
+<%--		</div>--%>
 		
 		<div id="remarkDiv" style="background-color: #E6E6E6; width: 870px; height: 90px;">
 			<form role="form" style="position: relative;top: 10px; left: 10px;">
 				<textarea id="remark" class="form-control" style="width: 850px; resize : none;" rows="2"  placeholder="添加备注..."></textarea>
 				<p id="cancelAndSaveBtn" style="position: relative;left: 737px; top: 10px; display: none;">
 					<button id="cancelBtn" type="button" class="btn btn-default">取消</button>
-					<button type="button" class="btn btn-primary">保存</button>
+					<button type="button" class="btn btn-primary" id="saveRemarkBtn">保存</button>
 				</p>
 			</form>
 		</div>
